@@ -55,9 +55,14 @@ class VCG:
             # TODO: Compute the payment and return it.
 
             payment = 0
-            for i in xrange(k + 1, n, -1):
-                if i != n - 1:    
-                    payment += (c[i-1] - c[i]) * self.value
+            for i in range(n - 1, k - 1, -1):
+                if i == n - 1:
+                    payment += reserve
+                elif i == n - 2:
+                    payment += c[i] * max(reserve, allocated_bids[i+1][1])
+                else:
+                    payment += (c[i] - c[i+1]) * allocated_bids[i][1]
+                print payment
             return payment
 
         def norm(totals):
