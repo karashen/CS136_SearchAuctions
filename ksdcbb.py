@@ -98,7 +98,15 @@ class KsdcBB:
         (slot, min_bid, max_bid) = self.target_slot(t, history, reserve)
 
         # TODO: Fill this in.
-        bid = 0  # change this
+        if min_bid >= self.value:
+        	bid = self.value
+        if slot == 0:
+        	bid = self.value
+        else:
+        	click_1 = round(30 * math.cos(math.pi * t / 24) + 50)
+        	click_j = click_1 * (0.75 ** slot)
+        	click_jminus = click_j / 0.75
+        	bid = self.value - ((click_j / click_jminus) * (self.value - min_bid))
         
         return bid
 
