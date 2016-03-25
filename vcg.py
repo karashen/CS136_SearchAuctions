@@ -57,11 +57,9 @@ class VCG:
             payment = 0
             for i in range(n - 1, k - 1, -1):
                 if i == n - 1:
-                    payment += reserve
-                elif i == n - 2:
-                    payment += c[i] * max(reserve, allocated_bids[i+1][1])
+                    payment += c[i] * max(reserve, valid_bids[i+1][1])
                 else:
-                    payment += (c[i] - c[i+1]) * allocated_bids[i][1]
+                    payment += (c[i] - c[i+1]) * allocated_bids[i+1][1]
                 print payment
             return payment
 
