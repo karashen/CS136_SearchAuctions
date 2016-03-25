@@ -13,6 +13,8 @@ class KsdcBudget:
         self.value = value
         self.budget = budget
 
+        self.spent = 0
+
     def initial_bid(self, reserve):
         return self.value / 2
 
@@ -97,6 +99,11 @@ class KsdcBudget:
         (slot, min_bid, max_bid) = self.target_slot(t, history, reserve)
 
         # TODO: Fill this in.
+        # Keep track of money spent
+        if self.id in history.round(t-1).occupants:
+            index = history.round(t-1).occupants.index(self.id)
+            self.spent += history.round(t-1).bids[index+1][1]
+
         click_1 = round(30 * math.cos(math.pi * t / 24) + 50)
         if min_bid >= self.value:
             bid = self.value
@@ -105,11 +112,13 @@ class KsdcBudget:
         else:
             click_j = click_1 * (0.75 ** slot)
             click_jminus = click_j / 0.75
-            if click_1 <= 50:
-                bid = self.value - ((click_j / click_jminus) * (self.value - min_bid))
+            if self.spent >= 0.5 * self.budget and t <= 24:
+                bid = 0
+            elif t > 12 and t < 36:
+                bid = min(1/50 * self.budget, self.value - ((click_j / click_jminus) * (self.value - min_bid)))
             else:
-                bid = min(1 / 48 * 600, self.value - ((click_j / click_jminus) * (self.value - min_bid)))
-        
+                bid = self.value - ((click_j / click_jminus) * (self.value - min_bid))        
+
         return bid
 
     def __repr__(self):
