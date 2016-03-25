@@ -40,7 +40,7 @@ class VCG:
         num_slots = len(slot_clicks)
         allocated_bids = valid_bids[:num_slots]
         if len(allocated_bids) == 0:
-            return ([], [])``
+            return ([], [])
         
         (allocation, just_bids) = zip(*allocated_bids)
 
@@ -57,7 +57,7 @@ class VCG:
             payment = 0
             for i in xrange(k + 1, n, -1):
                 if i != n - 1:    
-                    payment += (slot_clicks[i-1] - slot_clicks[i]) * self.value
+                    payment += (c[i-1] - c[i]) * self.value
             return payment
 
         def norm(totals):
